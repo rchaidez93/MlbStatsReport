@@ -1,8 +1,9 @@
 package MlbStatsProject.mlbDAO;
 
 import MlbStatsProject.datasource.MyDataSourceFactory;
-import MlbStatsProject.MlbStats;
+import MlbStatsProject.mlbDTO.MlbStats;
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
@@ -19,14 +20,23 @@ public class MlbStatsDOAImpl implements MlbStatsDOA<MlbStats> {
 
     private static Connection con = null;
 
-    @Override
-    public void update(MlbStats mlb) {
-
-    }
 
     @Override
     public List<MlbStats> getAll() {
-        return null;
+
+        List<MlbStats> mlbStatsRecord = null;
+        try {
+            con = ds.getConnection();
+            DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
+            mlbStatsRecord = create
+                    .select()
+                    .from(MLB_STATS)
+                    .fetchInto(MlbStats.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return mlbStatsRecord;
     }
 
     @Override
@@ -35,7 +45,6 @@ public class MlbStatsDOAImpl implements MlbStatsDOA<MlbStats> {
         try {
             con = ds.getConnection();
             DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
-//            MlbStatsRecord mlbStatsRecord = create.newRecord(MLB_STATS);
 
             for (MlbStats mlbStats : mlbStatsList) {
                 create.insertInto(MLB_STATS)
@@ -47,12 +56,9 @@ public class MlbStatsDOAImpl implements MlbStatsDOA<MlbStats> {
                         .set(MLB_STATS.WINNER, mlbStats.getWinner())
                         .execute();
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -65,5 +71,20 @@ public class MlbStatsDOAImpl implements MlbStatsDOA<MlbStats> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Record fetchOne() {
+        Record record = null;
+        try {
+            con = ds.getConnection();
+            DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
+            record = create.select()
+                    .from(MLB_STATS)
+                    .fetchOne();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return record;
     }
 }
