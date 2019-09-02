@@ -41,16 +41,23 @@ public class MlbRunReport extends TimerTask {
             reportQueueDAO = new ReportQueueDAO();
             //simple query to get the report(s) that has status 1
             rowCheck = reportQueueDAO.getReportsStatus1();
+            if (rowCheck.size() > 0) {
+                //change the status to 2 for report running indication and run the report.
+                for (Record x : rowCheck) {//send to mlbReport and update the db
+                    int rowId = x.getValue(MLB_REPORT.ID);
+                    reportQueueDAO.updateReportQueue("status", 2, rowId);
+                    MlbReport mlbReport = new MlbReport(rowId);
+                }
+            }
+            else{
+                logger.info("No report to run at this time. Exiting program.");
+                System.exit(0);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        //change the status to 2 for report running indication and run the report.
-        for (Record x : rowCheck) {//send to mlbReport and update the db
-            int rowId = x.getValue(MLB_REPORT.ID);
-            reportQueueDAO.updateReportQueue("status", 2, rowId);
-            MlbReport mlbReport = new MlbReport(rowId);
-        }
+
     }
 
 }

@@ -9,16 +9,18 @@ public class MlbStats {
 
 
     private int id;
-    private int epoch_time;
+    private long epoch_time;
+    private int season;
     private String team1;
     private String team2;
     private int score1;
     private int score2;
     private String winner;
 
-    public MlbStats(int id, int epoch_time, String team1, String team2, int score1, int score2, String winner) {
+    public MlbStats(int id, long epoch_time, int season, String team1, String team2, int score1, int score2, String winner) {
         this.id = id;
         this.epoch_time = epoch_time;
+        this.season = season;
         this.team1 = team1;
         this.team2 = team2;
         this.score1 = score1;
@@ -29,7 +31,8 @@ public class MlbStats {
     public MlbStats(Map<String, String> row) {
         super();
         String tempEpoch = row.get("date");
-        this.epoch_time = epochconverter(tempEpoch);
+        this.epoch_time = dateToEpochConverter(tempEpoch);
+        this.season = Integer.parseInt(row.get("season"));
         this.team1 = row.get("team1");
         this.team2 = row.get("team2");;
         this.score1 = Integer.parseInt(row.get("score1"));
@@ -38,12 +41,12 @@ public class MlbStats {
         this.winner = (score1 > score2) ? team1 : team2;
     }
 
-    private int epochconverter(String date){
+    private long dateToEpochConverter(String date){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        int epoch = 0;
+        long epoch = 0;
         try {
             Date newDate = df.parse(date);
-            epoch = (int) newDate.getTime();
+            epoch = newDate.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -58,12 +61,16 @@ public class MlbStats {
         this.id = id;
     }
 
-    public int getEpoch_time() {
+    public long getEpoch_time() {
         return epoch_time;
     }
 
-    public void setEpoch_time(int epoch_time) {
+    public void setEpoch_time(long epoch_time) {
         this.epoch_time = epoch_time;
+    }
+
+    public int getSeason() {
+        return season;
     }
 
     public String getTeam1() {
@@ -112,6 +119,7 @@ public class MlbStats {
         return "{" +
                 "id: " + id +
                 ", epoch_time: " + epoch_time +
+                ", season: " + season +
                 ", team1: '" + team1 + '\'' +
                 ", team2: '" + team2 + '\'' +
                 ", score1: " + score1 +

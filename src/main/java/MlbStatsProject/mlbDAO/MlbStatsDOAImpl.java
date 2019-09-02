@@ -31,6 +31,7 @@ public class MlbStatsDOAImpl implements MlbStatsDOA<MlbStats> {
             mlbStatsRecord = create
                     .select()
                     .from(MLB_STATS)
+                    .orderBy(MLB_STATS.EPOCH_DATE.desc())
                     .fetchInto(MlbStats.class);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,6 +50,7 @@ public class MlbStatsDOAImpl implements MlbStatsDOA<MlbStats> {
             for (MlbStats mlbStats : mlbStatsList) {
                 create.insertInto(MLB_STATS)
                         .set(MLB_STATS.EPOCH_DATE,mlbStats.getEpoch_time())
+                        .set(MLB_STATS.SEASON, mlbStats.getSeason())
                         .set(MLB_STATS.TEAM1,mlbStats.getTeam1())
                         .set(MLB_STATS.TEAM2,mlbStats.getTeam2())
                         .set(MLB_STATS.SCORE1,mlbStats.getScore1())
@@ -81,6 +83,7 @@ public class MlbStatsDOAImpl implements MlbStatsDOA<MlbStats> {
             DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
             record = create.select()
                     .from(MLB_STATS)
+                    .limit(1)
                     .fetchOne();
         } catch (SQLException e) {
             e.printStackTrace();

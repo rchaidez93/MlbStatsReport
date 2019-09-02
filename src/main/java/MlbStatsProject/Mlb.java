@@ -4,6 +4,9 @@ package MlbStatsProject;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 
@@ -45,7 +48,6 @@ public class Mlb {
 
             int mlbStatsRows = create.selectCount().from(MLB_STATS).fetchOne(0, int.class);
 
-            logger.error(System.currentTimeMillis());
             MlbStatsDOA mlbstatsdoa = new MlbStatsDOAImpl();
             if(command.matches("update_db")){
                 CsvParser csvparser = new CsvParser();
@@ -57,7 +59,6 @@ public class Mlb {
             else if(command.matches("run_report")){
                 if(mlbStatsRows > 0){
 //                    initReportTable();
-                    logger.info("Report is about to run!");
                     Timer t = new Timer();
                     MlbRunReport mlbRunReport = new MlbRunReport();
                     t.schedule(mlbRunReport, 100);
@@ -88,7 +89,6 @@ public class Mlb {
         con = ds.getConnection();
         DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
 
-//        int rowCount = create.selectCount().from(MLB_STATS).fetchOne().value1();
         MlbStatsDOAImpl mlbStatsDOA = new MlbStatsDOAImpl();
         Record record = mlbStatsDOA.fetchOne();
 
