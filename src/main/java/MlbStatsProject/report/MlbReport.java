@@ -17,22 +17,32 @@ public class MlbReport {
     private static final Logger logger = LogManager.getLogger(MlbReport.class);
     private int reportid;
     List<MlbReportDTO> reportData = new ArrayList<MlbReportDTO>();
+    List<MlbReportDTO> fullReport = new ArrayList<MlbReportDTO>();
 
-    // TODO : send email, update db, end report
     public MlbReport(int rowId) {
         reportid = rowId;
         //grab data from db
         MlbStatsDOAImpl mlbStatsDOA = new MlbStatsDOAImpl();
         List<MlbStats> mlbStats = mlbStatsDOA.getAll();
 
-        getReport(mlbStats);
-        sendEmail();
-        endReport();
+        fullReport = getReport(mlbStats);
+//        updateQueue();
+//        endReport();
+
+
+    }
+
+    public List<MlbReportDTO> getFullReport() {
+        return fullReport;
+    }
+
+    private void updateQueue() {
+
     }
 
     // Columns: Year, Team, Wins, Winning Streak, Highest Score, Loses, Loosing Streak,
     // get metadata together
-    private void getReport(List<MlbStats> mlbStats) {
+    private List<MlbReportDTO> getReport(List<MlbStats> mlbStats) {
 
         HashSet<String> allTeams = getAllTeams(mlbStats);
         List<Integer> allYears = getAllYears(mlbStats);
@@ -52,7 +62,7 @@ public class MlbReport {
             });
         });
 
-        System.out.println(reportData);
+        return reportData;
     }
 
     private int getLoosingStreak(Integer year, String team, List<MlbStats> mlbStats) {
@@ -61,7 +71,7 @@ public class MlbReport {
 
         mlbStats.stream()
                 .filter(mlb -> {
-                    return  ((mlb.getSeason() == 2019) && (mlb.getTeam1().matches("STL") || mlb.getTeam2().matches("STL")) );
+                    return  ((mlb.getSeason() == year) && (mlb.getTeam1().matches(team) || mlb.getTeam2().matches(team)) );
                 })
                 .forEach(mlb -> {
                     if(!mlb.getWinner().matches(team)){
@@ -108,7 +118,7 @@ public class MlbReport {
 
         mlbStats.stream()
                 .filter(mlb -> {
-                    return  ((mlb.getSeason() == 2019) && (mlb.getTeam1().matches("STL") || mlb.getTeam2().matches("STL")) );
+                    return  ((mlb.getSeason() == year) && (mlb.getTeam1().matches(team) || mlb.getTeam2().matches(team)) );
                 })
                 .forEach(mlb -> {
                     if(mlb.getTeam1().matches(team)){
@@ -203,10 +213,7 @@ public class MlbReport {
 
     private void endReport() {
         logger.info("Ending Program");
-        System.exit(0);
-    }
-
-    private void sendEmail() {
+//        System.exit(0);
     }
 
 
