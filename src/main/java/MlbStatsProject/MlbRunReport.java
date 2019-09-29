@@ -47,6 +47,7 @@ public class MlbRunReport {
             if (rowCheck.size() > 0) {
                 for (Record x : rowCheck) {//send to mlbReport and update the db
                     int rowId = x.getValue(MLB_REPORT.ID);
+                    logger.info("Running report");
                     fullReport = new MlbReport(rowId);
                     reportQueueDAO.updateReportQueue("status", 2, rowId);
                 }

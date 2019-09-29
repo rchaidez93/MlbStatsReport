@@ -63,6 +63,7 @@ public class ReportController {
             e.printStackTrace();
         }
 
+        logger.info("Sending report");
         return mlbRunReport.getFullReport();
     }
 
