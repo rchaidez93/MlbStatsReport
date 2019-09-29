@@ -46,22 +46,14 @@ public class ReportController {
     public List<MlbReportDTO> index() {
 
         MlbRunReport mlbRunReport = null;
-
         ds = MyDataSourceFactory.getMySQLDataSource();
-        String command = "run_report";
-
 
         try {
             con = ds.getConnection();
             DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
-            Result<Record1<Integer>> count = create.select(count(USERS.ID)).from(USERS).fetch();
-
             int mlbStatsRows = create.selectCount().from(MLB_STATS).fetchOne(0, int.class);
 
-            MlbStatsDOA mlbstatsdoa = new MlbStatsDOAImpl();
-
             if(mlbStatsRows > 0){
-//                    initReportTable();
                 mlbRunReport = new MlbRunReport();
             }
             else{
@@ -70,7 +62,6 @@ public class ReportController {
         }catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return mlbRunReport.getFullReport();
     }
@@ -92,23 +83,4 @@ public class ReportController {
         logger.info("Finished deleting all mlb stats data!");
     }
 
-
-    //add new entry to mlb_report table if there is less than 3 already in queue
-    private static void initReportTable() throws SQLException {
-        ds = MyDataSourceFactory.getMySQLDataSource();
-        con = ds.getConnection();
-        DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
-
-        MlbStatsDOAImpl mlbStatsDOA = new MlbStatsDOAImpl();
-        Record record = mlbStatsDOA.fetchOne();
-
-        if(record.size() > 0){
-            ReportQueueDAO reportQueueDAO = new ReportQueueDAO();
-            reportQueueDAO.insertReport();
-        }
-        else{
-            logger.info("Too many reports being ran. Try again in a few minutes.");
-            System.exit(0);
-        }
-    }
 }

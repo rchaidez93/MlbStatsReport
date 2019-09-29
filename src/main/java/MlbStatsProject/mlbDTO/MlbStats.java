@@ -1,12 +1,14 @@
 package MlbStatsProject.mlbDTO;
 
+import lombok.Data;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+@Data
 public class MlbStats {
-
 
     private int id;
     private long epoch_time;
@@ -53,78 +55,78 @@ public class MlbStats {
         return epoch;
     }
 
-    public int getId() {
-        return id;
-    }
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    public long getEpoch_time() {
+//        return epoch_time;
+//    }
+//
+//    public void setEpoch_time(long epoch_time) {
+//        this.epoch_time = epoch_time;
+//    }
+//
+//    public int getSeason() {
+//        return season;
+//    }
+//
+//    public String getTeam1() {
+//        return team1;
+//    }
+//
+//    public void setTeam1(String team1) {
+//        this.team1 = team1;
+//    }
+//
+//    public String getTeam2() {
+//        return team2;
+//    }
+//
+//    public void setTeam2(String team2) {
+//        this.team2 = team2;
+//    }
+//
+//    public int getScore1() {
+//        return score1;
+//    }
+//
+//    public void setScore1(int score1) {
+//        this.score1 = score1;
+//    }
+//
+//    public int getScore2() {
+//        return score2;
+//    }
+//
+//    public void setScore2(int score2) {
+//        this.score2 = score2;
+//    }
+//
+//    public String getWinner() {
+//        return winner;
+//    }
+//
+//    public void setWinner(String winner) {
+//        this.winner = winner;
+//    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public long getEpoch_time() {
-        return epoch_time;
-    }
-
-    public void setEpoch_time(long epoch_time) {
-        this.epoch_time = epoch_time;
-    }
-
-    public int getSeason() {
-        return season;
-    }
-
-    public String getTeam1() {
-        return team1;
-    }
-
-    public void setTeam1(String team1) {
-        this.team1 = team1;
-    }
-
-    public String getTeam2() {
-        return team2;
-    }
-
-    public void setTeam2(String team2) {
-        this.team2 = team2;
-    }
-
-    public int getScore1() {
-        return score1;
-    }
-
-    public void setScore1(int score1) {
-        this.score1 = score1;
-    }
-
-    public int getScore2() {
-        return score2;
-    }
-
-    public void setScore2(int score2) {
-        this.score2 = score2;
-    }
-
-    public String getWinner() {
-        return winner;
-    }
-
-    public void setWinner(String winner) {
-        this.winner = winner;
-    }
-
-
-    @Override
-    public String toString() {
-        return "{" +
-                "id: " + id +
-                ", epoch_time: " + epoch_time +
-                ", season: " + season +
-                ", team1: '" + team1 + '\'' +
-                ", team2: '" + team2 + '\'' +
-                ", score1: " + score1 +
-                ", score2: " + score2 +
-                ", winner: '" + winner + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "{" +
+//                "id: " + id +
+//                ", epoch_time: " + epoch_time +
+//                ", season: " + season +
+//                ", team1: '" + team1 + '\'' +
+//                ", team2: '" + team2 + '\'' +
+//                ", score1: " + score1 +
+//                ", score2: " + score2 +
+//                ", winner: '" + winner + '\'' +
+//                '}';
+//    }
 }

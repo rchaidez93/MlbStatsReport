@@ -37,11 +37,6 @@ import static org.jooq.impl.DSL.count;
 @SpringBootApplication
 public class Mlb {
 
-    private static final Logger logger = LogManager.getLogger(Mlb.class);
-    private static DataSource ds = null;
-    private static Connection con = null;
-
-
     public static void main(String[] args) throws IOException, InterruptedException {
         SpringApplication.run(Mlb.class, args);
     }

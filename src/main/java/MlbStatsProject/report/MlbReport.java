@@ -24,20 +24,11 @@ public class MlbReport {
         //grab data from db
         MlbStatsDOAImpl mlbStatsDOA = new MlbStatsDOAImpl();
         List<MlbStats> mlbStats = mlbStatsDOA.getAll();
-
         fullReport = getReport(mlbStats);
-//        updateQueue();
-//        endReport();
-
-
     }
 
     public List<MlbReportDTO> getFullReport() {
         return fullReport;
-    }
-
-    private void updateQueue() {
-
     }
 
     // Columns: Year, Team, Wins, Winning Streak, Highest Score, Loses, Loosing Streak,

@@ -2,6 +2,7 @@ package MlbStatsProject;
 
 
 import MlbStatsProject.datasource.MyDataSourceFactory;
+import MlbStatsProject.mlbDAO.MlbStatsDOAImpl;
 import MlbStatsProject.mlbDTO.MlbReportDTO;
 import MlbStatsProject.mlbReportQueueDAO.ReportQueueDAO;
 import MlbStatsProject.report.MlbReport;
@@ -29,9 +30,11 @@ public class MlbRunReport {
 
     //want to run more than 1 report at once
     public MlbRunReport() throws SQLException {
+
         ds = MyDataSourceFactory.getMySQLDataSource();
         con = ds.getConnection();
 
+        initReportTable();
 
         logger.info("Checking reports table for status 1!");
         DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
@@ -39,15 +42,13 @@ public class MlbRunReport {
         Result<Record> rowCheck = null;
         try {
             reportQueueDAO = new ReportQueueDAO();
-            //simple query to get the report(s) that has status 1
+            //query to get the report(s) that have status 1
             rowCheck = reportQueueDAO.getReportsStatus1();
             if (rowCheck.size() > 0) {
-                //change the status to 2 for report running indication and run the report.
                 for (Record x : rowCheck) {//send to mlbReport and update the db
                     int rowId = x.getValue(MLB_REPORT.ID);
-                    reportQueueDAO.updateReportQueue("status", 2, rowId);
                     fullReport = new MlbReport(rowId);
-//                    fullReport = mlbReport.getFullReport();
+                    reportQueueDAO.updateReportQueue("status", 2, rowId);
                 }
             }
             else{
@@ -58,6 +59,25 @@ public class MlbRunReport {
             e.printStackTrace();
         }
 
+    }
+
+    //add new entry to mlb_report table if there is less than 3 already in queue
+    private static void initReportTable() throws SQLException {
+        ds = MyDataSourceFactory.getMySQLDataSource();
+        con = ds.getConnection();
+        DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
+
+        MlbStatsDOAImpl mlbStatsDOA = new MlbStatsDOAImpl();
+        Record record = mlbStatsDOA.fetchOne();
+
+        if(record.size() > 0){
+            ReportQueueDAO reportQueueDAO = new ReportQueueDAO();
+            reportQueueDAO.insertReport();
+        }
+        else{
+            logger.info("Too many reports being ran. Try again in a few minutes.");
+            System.exit(0);
+        }
     }
 
     public List<MlbReportDTO> getFullReport() {
