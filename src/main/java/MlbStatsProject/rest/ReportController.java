@@ -8,18 +8,21 @@ import MlbStatsProject.mlbDAO.MlbStatsDOA;
 import MlbStatsProject.mlbDAO.MlbStatsDOAImpl;
 import MlbStatsProject.mlbDTO.MlbReportDTO;
 import MlbStatsProject.mlbDTO.MlbStats;
-import MlbStatsProject.mlbReportQueueDAO.ReportQueueDAO;
+import MlbStatsProject.rest.api.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.*;
 import org.jooq.impl.DSL;
+import org.jooq.types.UInteger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import static MlbStatsProject.Tables.MLB_STATS;
@@ -83,5 +86,30 @@ public class ReportController {
         mlbstatsdoa.delete();
         logger.info("Finished deleting all mlb stats data!");
     }
+
+    @RequestMapping("/tellmeabout")
+    public ResponseEntity tellMeAbout(@RequestParam String name){
+
+        ds = MyDataSourceFactory.getMySQLDataSource();
+        String response = "";
+        Response apiResponse = new Response();
+        apiResponse.setStatus(0);
+        apiResponse.setMessage("Error");
+
+        try {
+            con = ds.getConnection();
+            DSLContext create = DSL.using(con, SQLDialect.MYSQL_8_0);
+            System.out.println(name);
+            Result<Record> user = create.select().from(USERS).where(USERS.FIRST_NAME.eq(name)).fetch();
+            apiResponse.setStatus(1);
+            apiResponse.setMessage(user.getValues(USERS.FIRST_NAME).get(0) + " " + user.getValues(USERS.LAST_NAME).get(0));
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return new ResponseEntity(apiResponse, HttpStatus.OK);
+    }
+
 
 }
