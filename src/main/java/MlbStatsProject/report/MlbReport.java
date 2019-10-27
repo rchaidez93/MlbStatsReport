@@ -60,7 +60,7 @@ public class MlbReport {
         AtomicInteger loosingStreak = new AtomicInteger();
         AtomicInteger newLoosingStreak = new AtomicInteger();
 
-        mlbStats.stream()
+        mlbStats.parallelStream()
                 .filter(mlb -> {
                     return  ((mlb.getSeason() == year) && (mlb.getTeam1().matches(team) || mlb.getTeam2().matches(team)) );
                 })
@@ -83,7 +83,7 @@ public class MlbReport {
     private int getLoses(int year, String team, List<MlbStats> mlbStats) {
         AtomicInteger loses = new AtomicInteger();
 
-        mlbStats.stream()
+        mlbStats.parallelStream()
                 .filter(mlb -> {
                     return  ((mlb.getSeason() == year) && (mlb.getTeam1().matches(team) || mlb.getTeam2().matches(team)) );
                 })
@@ -107,7 +107,7 @@ public class MlbReport {
         AtomicInteger highestScore = new AtomicInteger();
         AtomicInteger newHighestScore = new AtomicInteger();
 
-        mlbStats.stream()
+        mlbStats.parallelStream()
                 .filter(mlb -> {
                     return  ((mlb.getSeason() == year) && (mlb.getTeam1().matches(team) || mlb.getTeam2().matches(team)) );
                 })
@@ -133,7 +133,7 @@ public class MlbReport {
         AtomicInteger winningStreak = new AtomicInteger();
         AtomicInteger newWinningStreak = new AtomicInteger();
 
-        mlbStats.stream()
+        mlbStats.parallelStream()
                 .filter(mlb -> {
                     return  ((mlb.getSeason() == year) && (mlb.getTeam1().matches(team) || mlb.getTeam2().matches(team)) );
                 })
@@ -156,7 +156,7 @@ public class MlbReport {
     private int getWins(Integer year, String team, List<MlbStats> mlbStats) {
 
         AtomicInteger wins = new AtomicInteger();
-        mlbStats.stream().
+        mlbStats.parallelStream().
                 filter(c -> {
                     return  ((c.getSeason() == year) && (c.getWinner().matches(team)));
                 })
@@ -170,11 +170,11 @@ public class MlbReport {
     //get unique teams and year
     private HashSet<String> getAllTeams(List<MlbStats> mlbStats) {
 
-        HashMap<Integer,String> distinctTeams1 = (HashMap<Integer, String>) mlbStats.stream()
+        HashMap<Integer,String> distinctTeams1 = (HashMap<Integer, String>) mlbStats.parallelStream()
                 .distinct()
                 .collect(Collectors.toMap(MlbStats::getId,MlbStats::getTeam1));
 
-        HashMap<Integer, String> distinctTeams2 = (HashMap<Integer, String>) mlbStats.stream()
+        HashMap<Integer, String> distinctTeams2 = (HashMap<Integer, String>) mlbStats.parallelStream()
                 .distinct()
                 .collect(toMap(MlbStats::getId,MlbStats::getTeam1));
 
@@ -194,18 +194,11 @@ public class MlbReport {
             years.add(x.getSeason());
         });
 
-        List<Integer> allYears = years.stream()
+        List<Integer> allYears = years.parallelStream()
                 .distinct()
                 .collect(toList());
 
         return allYears;
     }
-
-
-    private void endReport() {
-        logger.info("Ending Program");
-//        System.exit(0);
-    }
-
 
 }

@@ -1,6 +1,7 @@
-package MlbStatsProject;
+package MlbStatsProject.report;
 
 
+import MlbStatsProject.Mlb;
 import MlbStatsProject.datasource.MyDataSourceFactory;
 import MlbStatsProject.mlbDAO.MlbStatsDOAImpl;
 import MlbStatsProject.mlbDTO.MlbReportDTO;

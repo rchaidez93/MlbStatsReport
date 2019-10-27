@@ -1,0 +1,36 @@
+{
+  "name": "Project1",
+  "version": "0.1.0",
+  "description": "React Data Grid with MLB stats data",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rchaidez93/MlbStatsReport.git"
+  },
+  "keywords": [
+    "rest",
+    "spring",
+    "data",
+    "react"
+  ],
+  "author": "Richard Chaidez",
+  "license": "",
+  "homepage": "https://github.com/rchaidez93/MlbStatsReport",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "react": "^16.8.6",
+    "react-data-grid": "^6.1.0",
+    "react-data-grid-addons": "^6.1.0",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1"
+  },
+  "scripts": {
+    "watch": "webpack --watch -d"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "webpack-cli": "^3.1.0"
+  }
+}
